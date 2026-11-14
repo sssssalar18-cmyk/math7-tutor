@@ -1,0 +1,1788 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آموزش تعاملی ریاضی هفتم</title>
+    <!-- تمام استایل‌ها به صورت داخلی نوشته شده‌اند تا بدون نیاز به اینترنت و بدون مشکل فیلترینگ در گیت‌هاب اجرا شوند -->
+    <style>
+        :root {
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --primary-light: #eef2ff;
+            --success: #059669;
+            --success-bg: #ecfdf5;
+            --danger: #e11d48;
+            --danger-bg: #fff1f2;
+            --warning: #d97706;
+            --warning-bg: #fffbeb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Tahoma, 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+        }
+
+        /* هدر */
+        header {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .header-inner {
+            max-width: 1024px;
+            margin: 0 auto;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .brand-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background-color: var(--primary);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .brand-title {
+            font-weight: bold;
+            font-size: 16px;
+            color: var(--text-main);
+        }
+
+        .breadcrumb {
+            font-size: 13px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 60%;
+        }
+
+        .breadcrumb span.link {
+            cursor: pointer;
+            color: var(--primary);
+        }
+
+        /* کانتینر اصلی */
+        main {
+            flex: 1;
+            max-width: 1024px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px 16px 40px;
+            animation: fadeIn 0.25s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* گرید فصل‌ها */
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 16px;
+        }
+
+        .chapter-card {
+            border-radius: 16px;
+            border: 2px solid;
+            padding: 20px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .chapter-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+        }
+
+        .chapter-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .badge {
+            font-size: 12px;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 8px;
+        }
+
+        .chapter-title {
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .chapter-subs-preview {
+            font-size: 12px;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(0,0,0,0.06);
+            padding-top: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* رنگ‌بندی فصل‌ها مطابق تصویر کتاب */
+        .theme-1 { background: #f0f9ff; border-color: #bae6fd; }
+        .theme-1 .badge { background: #e0f2fe; color: #0369a1; }
+        .theme-2 { background: #fff7ed; border-color: #fed7aa; }
+        .theme-2 .badge { background: #ffedd5; color: #c2410c; }
+        .theme-3 { background: #fdf2f8; border-color: #fbcfe8; }
+        .theme-3 .badge { background: #fce7f3; color: #be185d; }
+        .theme-4 { background: #ecfdf5; border-color: #a7f3d0; }
+        .theme-4 .badge { background: #d1fae5; color: #047857; }
+        .theme-5 { background: #f7fee7; border-color: #d9f99d; }
+        .theme-5 .badge { background: #ecfccb; color: #4d7c0f; }
+        .theme-6 { background: #ecfeff; border-color: #a5f3fc; }
+        .theme-6 .badge { background: #cffafe; color: #0e7490; }
+        .theme-7 { background: #fffbeb; border-color: #fde68a; }
+        .theme-7 .badge { background: #fef3c7; color: #b45309; }
+        .theme-8 { background: #fdf4ff; border-color: #f5d0fe; }
+        .theme-8 .badge { background: #fae8ff; color: #a21caf; }
+        .theme-9 { background: #f0fdfa; border-color: #99f6e4; }
+        .theme-9 .badge { background: #ccfbf1; color: #0f766e; }
+
+        /* دکمه‌ها */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background 0.15s, opacity 0.15s;
+        }
+
+        .btn-back {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            margin-bottom: 16px;
+        }
+
+        .btn-back:hover { background: #f1f5f9; }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .btn-primary:hover { background: var(--primary-hover); }
+
+        .btn-success {
+            background: var(--success);
+            color: #fff;
+        }
+
+        .btn-outline {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover { background: #f8fafc; }
+
+        /* لیست زیرفصل‌ها */
+        .sub-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .sub-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: border-color 0.15s, background 0.15s;
+        }
+
+        .sub-item:hover {
+            border-color: var(--primary);
+            background: #fafaff;
+        }
+
+        .sub-item-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sub-num {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .tags-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .mini-tag {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            color: var(--text-muted);
+        }
+
+        .mini-tag.err {
+            background: var(--danger-bg);
+            color: var(--danger);
+            font-weight: bold;
+        }
+
+        /* تب‌های ۴ گانه زیرفصل */
+        .tabs-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            background: #e2e8f0;
+            padding: 6px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 640px) {
+            .tabs-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .tab-btn {
+            padding: 10px 8px;
+            border: none;
+            border-radius: 10px;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .tab-btn.active {
+            background: #fff;
+            color: var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        }
+
+        .tab-btn.active.diag-tab {
+            color: var(--danger);
+        }
+
+        .err-pill {
+            background: var(--danger);
+            color: #fff;
+            font-size: 11px;
+            padding: 1px 6px;
+            border-radius: 99px;
+        }
+
+        /* باکس‌های محتوا */
+        .card-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        /* آزمایشگاه تعاملی */
+        .lab-box {
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 14px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .lab-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .lab-badge {
+            background: var(--primary-light);
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 8px;
+        }
+
+        .lab-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin-top: 12px;
+            background: #fff;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .control-group label {
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--text-muted);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .svg-stage {
+            width: 100%;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            overflow: hidden;
+        }
+
+        /* فرم تمرین و آزمون */
+        .input-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 500px) {
+            .input-row { flex-direction: column; }
+        }
+
+        .text-input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .text-input:focus {
+            border-color: var(--primary);
+        }
+
+        .feedback-box {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .feedback-success {
+            background: var(--success-bg);
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+        }
+
+        .feedback-error {
+            background: var(--danger-bg);
+            border: 1px solid #fecdd3;
+            color: #9f1239;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 540px) {
+            .options-grid { grid-template-columns: 1fr; }
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .option-label:hover {
+            border-color: var(--primary);
+        }
+
+        /* مودال پیام */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            padding: 16px;
+        }
+
+        .modal-backdrop.open { display: flex; }
+
+        .modal-card {
+            background: #fff;
+            border-radius: 16px;
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            box-shadow: 0 20px 25px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-inner">
+            <div class="brand" onclick="goHome()">
+                <div class="brand-badge">۷</div>
+                <div class="brand-title">ریاضی پایه هفتم</div>
+            </div>
+            <div id="breadcrumb" class="breadcrumb">فهرست فصل‌ها</div>
+        </div>
+    </header>
+
+    <main id="app-container"></main>
+
+    <!-- مودال اختصاصی بدون نیاز به alert -->
+    <div id="custom-modal" class="modal-backdrop">
+        <div class="modal-card">
+            <h3 id="modal-title" style="font-size:16px; margin-bottom:8px;">پیام</h3>
+            <p id="modal-body" style="font-size:13px; color:#475569; margin-bottom:16px;"></p>
+            <button onclick="closeModal()" class="btn btn-primary" style="width:100%;">متوجه شدم</button>
+        </div>
+    </div>
+
+    <script>
+        // =========================================================================
+        // ۱. سرفصل‌های دقیق ۹ فصل و زیرفصل‌های آن‌ها مطابق تصویر کتاب
+        // =========================================================================
+        const syllabusData = [
+            {
+                id: 1,
+                title: "فصل ۱ - راهبردهای حل مسئله",
+                subchapters: [
+                    { id: "1-1", title: "حل مسئله با راهبردهای عملی (رسم شکل، الگوسازی و حدس و آزمایش)" }
+                ]
+            },
+            {
+                id: 2,
+                title: "فصل ۲ - عددهای صحیح",
+                subchapters: [
+                    { id: "2-1", title: "معرفی عددهای علامت‌دار" },
+                    { id: "2-2", title: "جمع و تفریق عددهای صحیح (۱)" },
+                    { id: "2-3", title: "جمع و تفریق عددهای صحیح (۲)" },
+                    { id: "2-4", title: "ضرب و تقسیم عددهای صحیح" },
+                    { id: "2-5", title: "مرور فصل ۲" }
+                ]
+            },
+            {
+                id: 3,
+                title: "فصل ۳ - جبر و معادله",
+                subchapters: [
+                    { id: "3-1", title: "الگوهای عددی" },
+                    { id: "3-2", title: "عبارت‌های جبری" },
+                    { id: "3-3", title: "مقدار عددی یک عبارت جبری" },
+                    { id: "3-4", title: "معادله" },
+                    { id: "3-5", title: "مرور فصل ۳" }
+                ]
+            },
+            {
+                id: 4,
+                title: "فصل ۴ - هندسه و استدلال",
+                subchapters: [
+                    { id: "4-1", title: "روابط بین پاره‌خط‌ها" },
+                    { id: "4-2", title: "روابط بین زاویه‌ها" },
+                    { id: "4-3", title: "تبدیلات هندسی (انتقال، تقارن، دوران)" },
+                    { id: "4-4", title: "شکل‌های مساوی (هم‌نهشت)" },
+                    { id: "4-5", title: "مرور فصل ۴" }
+                ]
+            },
+            {
+                id: 5,
+                title: "فصل ۵ - شمارنده‌ها و اعداد اول",
+                subchapters: [
+                    { id: "5-1", title: "عدد اول" },
+                    { id: "5-2", title: "شمارنده اول" },
+                    { id: "5-3", title: "بزرگ‌ترین شمارنده مشترک" },
+                    { id: "5-4", title: "کوچک‌ترین مضرب مشترک" },
+                    { id: "5-5", title: "مرور فصل ۵" }
+                ]
+            },
+            {
+                id: 6,
+                title: "فصل ۶ - سطح و حجم",
+                subchapters: [
+                    { id: "6-1", title: "حجم‌های هندسی" },
+                    { id: "6-2", title: "محاسبه حجم‌های منشوری" },
+                    { id: "6-3", title: "مساحت جانبی و کل" },
+                    { id: "6-4", title: "حجم و سطح" },
+                    { id: "6-5", title: "مرور فصل ۶" }
+                ]
+            },
+            {
+                id: 7,
+                title: "فصل ۷ - توان و جذر",
+                subchapters: [
+                    { id: "7-1", title: "تعریف توان" },
+                    { id: "7-2", title: "محاسبه عبارت توان‌دار" },
+                    { id: "7-3", title: "ساده کردن عبارت‌های توان‌دار" },
+                    { id: "7-4", title: "جذر و ریشه" },
+                    { id: "7-5", title: "مرور فصل ۷" }
+                ]
+            },
+            {
+                id: 8,
+                title: "فصل ۸ - بردار و مختصات",
+                subchapters: [
+                    { id: "8-1", title: "پاره‌خط جهت‌دار" },
+                    { id: "8-2", title: "بردارهای مساوی و قرینه" },
+                    { id: "8-3", title: "مختصات" },
+                    { id: "8-4", title: "بردار انتقال" },
+                    { id: "8-5", title: "مرور فصل ۸" }
+                ]
+            },
+            {
+                id: 9,
+                title: "فصل ۹ - آمار و احتمال",
+                subchapters: [
+                    { id: "9-1", title: "جمع‌آوری و نمایش داده‌ها" },
+                    { id: "9-2", title: "نمودارها و تفسیر نتیجه‌ها" },
+                    { id: "9-3", title: "احتمال یا اندازه‌گیری شانس" },
+                    { id: "9-4", title: "احتمال و تجربه" },
+                    { id: "9-5", title: "مرور فصل ۹" }
+                ]
+            }
+        ];
+
+        // =========================================================================
+        // ۲. آزمایشگاه‌های گرافیکی تعاملی برای هر فصل (SVG زنده و قابل کنترل)
+        // =========================================================================
+        function getChapterLabHTML(chapterId, subTitle) {
+            switch (chapterId) {
+                case 1: // آزمایشگاه رسم گراف و دست دادن / بازی تیم‌ها
+                    return `
+                        <div class="lab-box">
+                            <div class="lab-header">
+                                <span class="lab-badge">آزمایشگاه عملی فصل ۱: رسم شکل و الگوسازی</span>
+                                <span style="font-size:12px; color:#64748b;">تعداد تیم‌ها را تغییر دهید و خطوط بازی را ببینید</span>
+                            </div>
+                            <div class="svg-stage">
+                                <svg id="lab1-svg" width="320" height="210" viewBox="0 0 320 210"></svg>
+                            </div>
+                            <div class="lab-controls">
+                                <div class="control-group">
+                                    <label>تعداد تیم‌ها (نقاط): <span id="lab1-val" style="color:#0369a1;">۴ تیم</span></label>
+                                    <input type="range" min="2" max="7" value="4" oninput="updateLab1(this.value)">
+                                </div>
+                                <div id="lab1-result" style="font-size:13px; font-weight:bold; color:#1e293b;">
+                                    تعداد کل بازی‌ها (خطوط): ۶ بازی
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                case 2: // آزمایشگاه محور اعداد صحیح و حرکت برداری روی محور
+                    return `
+                        <div class="lab-box">
+                            <div class="lab-header">
+                                <span class="lab-badge">آزمایشگاه عملی فصل ۲: محور اعداد و حرکت‌های مثبت و منفی</span>
+                                <span style="font-size:12px; color:#64748b;">شروع و حرکت را تنظیم کنید</span>
+                            </div>
+                            <div class="svg-stage">
+                                <svg id="lab2-svg" width="360" height="140" viewBox="0 0 360 140"></svg>
+                            </div>
+                            <div class="lab-controls">
+                                <div class="control-group">
+                                    <label>عدد اول (نقطه شروع): <span id="lab2-start-lbl" style="color:#c2410c;">-۳</span></label>
+                                    <input type="range" id="lab2-start" min="-6" max="6" value="-3" oninput="updateLab2()">
+                                </div>
+                                <div class="control-group">
+                                    <label>حرکت دوم (جمع با): <span id="lab2-move-lbl" style="color:#059669;">+۵</span></label>
+                                    <input type="range" id="lab2-move" min="-6" max="6" value="5" oninput="updateLab2()">
+                                </div>
+                            </div>
+                            <div id="lab2-eq" style="margin-top:10px; text-align:center; font-weight:bold; font-size:14px; color:#1e293b;">
+                                عبارت: (۳-) + (۵+) = ۲+
+                            </div>
+                        </div>
+                    `;
+
+                case 3: // آزمایشگاه ترازوی معادله و ماشین ورودی-خروجی جبر
+                    return `
+                        <div class="lab-box">
+                            <div class="lab-header">
+                                <span class="lab-badge">آزمایشگاه عملی فصل ۳: ترازوی تعادل معادله (2x + b = c)</span>
+                                <span style="font-size:12px; color:#64748b;">مقدار مجهول x را پیدا کنید</span>
+                            </div>
+                            <div class="svg-stage">
+                                <svg id="lab3-svg" width="340" height="170" viewBox="0 0 340 170"></svg>
+                            </div>
+                            <div class="lab-controls">
+                                <div class="control-group">
+                                    <label>حدس شما برای مقدار x (وزن هر جعبه): <span id="lab3-x-lbl" style="color:#be185d;">۲</span></label>
+                                    <input type="range" id="lab3-x" min="1" max="8" value="2" oninput="updateLab3(this.value)">
+                                </div>
+                                <div id="lab3-status" style="font-size:13px; font-weight:bold; color:#e11d48;">
+                                    ترازو نامتعادل است! (کفه چپ سبک‌تر است)
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                case 4: // آزمایشگاه زاویه‌های متمم، مکمل و تقارن هندسی
+                    return `
+                        <div class="lab-box">
+                            <div class="lab-header">
+                                <span class="lab-badge">آزمایشگاه عملی فصل ۴: نقاله زنده و زاویه‌های مکمل</span>
+                                <span style="font-size:12px; color:#64748b;">خط مورب را بچرخانید</span>
+                            </div>
+                            <div class="svg-stage">
+                                <svg id="lab4-svg" width="340" height="180" viewBox="0 0 340 180"></svg>
+                            </div>
+                            <div class="lab-controls">
+                                <div class="control-group">
+                                    <label>اندازه زاویه حاده (راست): <span id="lab4-ang-lbl" style="color:#047857;">۵۰ درجه</span></label>
+                                    <input type="range" id="lab4-ang" min="15" max="165" value="50" oninput="updateLab4(this.value)">
+                                </div>
+                                <div id="lab4-info" style="font-size:13px; font-weight:bold; color:#1e293b;">
+                                    زاویه مکمل (چپ): ۱۳۰ درجه | مجموع: ۱۸۰ درجه
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                case 5: // آزمایشگاه غربال اعداد اول و مستطیل‌سازی
+                    return `
+                        <div class="lab-box">
+                            <div class="lab-header">
+                                <span class="lab-badge">آزمایشگاه عملی فصل ۵: کاشی‌کاری مستطیلی برای تشخیص عدد اول</span>
+                                <span style="font-size:12px; color:#64748b;">عددی را انتخاب کنید و ببینید چند مستطیل می‌سازد</span>
+                            </div>
+                            <div class="svg-stage">
+                                <svg id="lab5-svg" width="340" height="160" viewBox="0 0 340 160"></svg>
+                            </div>
+                            <div class="lab-controls">
+                                <div class="control-group">
+                                    <label>عدد انتخابی: <span id="lab5-num-lbl" style="color:#4d7c0f;">۷</span></label>
+                                    <input type="range" id="lab5-num" min="2" max="16" value="7" oninput="updateLab5(this.value)">
+                                </div>
+                                <div id="lab5-info" style="font-size:13px; font-weight:bold; color:#059669;">
+                                    عدد ۷ اول است! فقط ۱ مستطیل (۱×۷) ساخته می‌شود.
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                case 6: // آزمایشگاه سه بعدی مکعب مستطیل برای درک سطح و حجم
+                    return `
+                        <div class="lab-box">
+                            <div class="lab-header">
+                                <span class="lab-badge">آزمایشگاه عملی فصل ۶: شبیه‌ساز سه‌بعدی مکعب مستطیل (حجم و مساحت)</span>
+                                <span style="font-size:12px; color:#64748b;">طول، عرض و ارتفاع را تغییر دهید</span>
+                            </div>
+                            <div class="svg-stage">
+                                <svg id="lab6-svg" width="340" height="220" viewBox="0 0 340 220"></svg>
+                            </div>
+                            <div class="lab-controls">
+                                <div class="control-group">
+                                    <label>طول: <span id="lab6-l-lbl">۴</span></label>
+                                    <input type="range" id="lab6-l" min="1" max="6" value="4" oninput="updateLab6()">
+                                </div>
+                                <div class="control-group">
+                                    <label>عرض: <span id="lab6-w-lbl">۳</span></label>
+                                    <input type="range" id="lab6-w" min="1" max="5" value="3" oninput="updateLab6()">
+                                </div>
+                                <div class="control-group">
+                                    <label>ارتفاع: <span id="lab6-h-lbl">۲</span></label>
+                                    <input type="range" id="lab6-h" min="1" max="5" value="2" oninput="updateLab6()">
+                                </div>
+                            </div>
+                            <div id="lab6-stats" style="margin-top:10px; display:grid; grid-template-columns:repeat(3,1fr); gap:8px; text-align:center; font-size:12px;">
+                                <div style="background:#fff; padding:8px; border-radius:8px; border:1px solid #cbd5e1;">
+                                    <div style="color:#64748b;">حجم (تعداد مکعب‌ها)</div>
+                                    <strong style="color:#0e7490; font-size:14px;">۲۴ واحد مکعب</strong>
+                                </div>
+                                <div style="background:#fff; padding:8px; border-radius:8px; border:1px solid #cbd5e1;">
+                                    <div style="color:#64748b;">مساحت جانبی</div>
+                                    <strong style="color:#0369a1; font-size:14px;">۲۸ واحد مربع</strong>
+                                </div>
+                                <div style="background:#fff; padding:8px; border-radius:8px; border:1px solid #cbd5e1;">
+                                    <div style="color:#64748b;">مساحت کل (کاغذ کادو)</div>
+                                    <strong style="color:#4f46e5; font-size:14px;">۵۲ واحد مربع</strong>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                case 7: // آزمایشگاه رشد نمایی توان و مربع کامل برای جذر
+                    return `
+                        <div class="lab-box">
+                            <div class="lab-header">
+                                <span class="lab-badge">آزمایشگاه عملی فصل ۷: درخت تقسیم سلولی توان (2ⁿ)</span>
+                                <span style="font-size:12px; color:#64748b;">تعداد مراحل تقسیم را تغییر دهید</span>
+                            </div>
+                            <div class="svg-stage">
+                                <svg id="lab7-svg" width="340" height="170" viewBox="0 0 340 170"></svg>
+                            </div>
+                            <div class="lab-controls">
+                                <div class="control-group">
+                                    <label>توان (مرحله تقسیم): <span id="lab7-pow-lbl" style="color:#b45309;">۳</span></label>
+                                    <input type="range" id="lab7-pow" min="1" max="5" value="3" oninput="updateLab7(this.value)">
+                                </div>
+                                <div id="lab7-info" style="font-size:13px; font-weight:bold; color:#1e293b;">
+                                    2³ = 2 × 2 × 2 = ۸ سلول
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                case 8: // آزمایشگاه صفحه مختصات و بردار انتقال
+                    return `
+                        <div class="lab-box">
+                            <div class="lab-header">
+                                <span class="lab-badge">آزمایشگاه عملی فصل ۸: صفحه مختصات و رسم بردار</span>
+                                <span style="font-size:12px; color:#64748b;">طول و عرض بردار را تغییر دهید</span>
+                            </div>
+                            <div class="svg-stage">
+                                <svg id="lab8-svg" width="280" height="220" viewBox="0 0 280 220"></svg>
+                            </div>
+                            <div class="lab-controls">
+                                <div class="control-group">
+                                    <label>حرکت افقی (طول بردار x): <span id="lab8-x-lbl" style="color:#a21caf;">+۳</span></label>
+                                    <input type="range" id="lab8-x" min="-4" max="4" value="3" oninput="updateLab8()">
+                                </div>
+                                <div class="control-group">
+                                    <label>حرکت عمودی (عرض بردار y): <span id="lab8-y-lbl" style="color:#a21caf;">+۲</span></label>
+                                    <input type="range" id="lab8-y" min="-4" max="4" value="2" oninput="updateLab8()">
+                                </div>
+                            </div>
+                            <div id="lab8-info" style="margin-top:8px; text-align:center; font-size:13px; font-weight:bold;">
+                                نقطه شروع A(1,1) + بردار [3, 2] = نقطه مقصد B(4,3)
+                            </div>
+                        </div>
+                    `;
+
+                case 9: // آزمایشگاه پرتاب تاس و شبیه‌ساز احتمال تجربی
+                    return `
+                        <div class="lab-box">
+                            <div class="lab-header">
+                                <span class="lab-badge">آزمایشگاه عملی فصل ۹: شبیه‌ساز پرتاب تاس و نمودار فراوانی</span>
+                                <span style="font-size:12px; color:#64748b;">تاس بیندازید و احتمال تجربی را ببینید</span>
+                            </div>
+                            <div class="svg-stage">
+                                <svg id="lab9-svg" width="340" height="160" viewBox="0 0 340 160"></svg>
+                            </div>
+                            <div class="lab-controls" style="justify-content:center;">
+                                <button onclick="rollDiceSim(1)" class="btn btn-primary">۱ بار پرتاب تاس 🎲</button>
+                                <button onclick="rollDiceSim(30)" class="btn btn-outline">۳۰ بار پرتاب سریع ⚡</button>
+                                <button onclick="resetDiceSim()" class="btn btn-outline">صفر کردن</button>
+                            </div>
+                            <div id="lab9-info" style="margin-top:8px; text-align:center; font-size:12px; color:#0f766e; font-weight:bold;">
+                                تعداد کل پرتاب‌ها: ۰ | هرچه بیشتر پرتاب کنید، ستون‌ها به هم نزدیک‌تر می‌شوند!
+                            </div>
+                        </div>
+                    `;
+                default:
+                    return '';
+            }
+        }
+
+        // =========================================================================
+        // ۳. توابع رسم گرافیکی آزمایشگاه‌ها (SVG Generators)
+        // =========================================================================
+        function initCurrentLab(chapterId) {
+            if (chapterId === 1) updateLab1(4);
+            if (chapterId === 2) updateLab2();
+            if (chapterId === 3) updateLab3(2);
+            if (chapterId === 4) updateLab4(50);
+            if (chapterId === 5) updateLab5(7);
+            if (chapterId === 6) updateLab6();
+            if (chapterId === 7) updateLab7(3);
+            if (chapterId === 8) updateLab8();
+            if (chapterId === 9) renderDiceChart();
+        }
+
+        // آزمایشگاه فصل ۱: رسم گراف چندضلعی و قطرها
+        function updateLab1(n) {
+            n = parseInt(n, 10);
+            const svg = document.getElementById('lab1-svg');
+            if (!svg) return;
+            document.getElementById('lab1-val').innerText = toPersian(n) + ' تیم';
+            const games = (n * (n - 1)) / 2;
+            document.getElementById('lab1-result').innerText = `تعداد کل بازی‌ها (خطوط): ${toPersian(games)} بازی`;
+
+            const cx = 160, cy = 105, r = 75;
+            const pts = [];
+            for (let i = 0; i < n; i++) {
+                const angle = (2 * Math.PI * i) / n - Math.PI / 2;
+                pts.push({ x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) });
+            }
+
+            let html = '';
+            // رسم خطوط بین تمام جفت نقاط
+            for (let i = 0; i < n; i++) {
+                for (let j = i + 1; j < n; j++) {
+                    html += `<line x1="${pts[i].x}" y1="${pts[i].y}" x2="${pts[j].x}" y2="${pts[j].y}" stroke="#38bdf8" stroke-width="2" opacity="0.75" />`;
+                }
+            }
+            // رسم نقاط تیم‌ها
+            pts.forEach((p, idx) => {
+                html += `<circle cx="${p.x}" cy="${p.y}" r="13" fill="#0284c7" stroke="#fff" stroke-width="2" />`;
+                html += `<text x="${p.x}" y="${p.y + 4}" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">${toPersian(idx + 1)}</text>`;
+            });
+            svg.innerHTML = html;
+        }
+
+        // آزمایشگاه فصل ۲: محور اعداد صحیح
+        function updateLab2() {
+            const svg = document.getElementById('lab2-svg');
+            if (!svg) return;
+            const start = parseInt(document.getElementById('lab2-start').value, 10);
+            const move = parseInt(document.getElementById('lab2-move').value, 10);
+            const end = Math.max(-8, Math.min(8, start + move));
+
+            document.getElementById('lab2-start-lbl').innerText = (start > 0 ? '+' : '') + toPersian(start);
+            document.getElementById('lab2-move-lbl').innerText = (move > 0 ? '+' : '') + toPersian(move);
+            document.getElementById('lab2-eq').innerText = `عبارت ریاضی: (${toPersian(start)}) + (${move >= 0 ? '+' : ''}${toPersian(move)}) = ${end >= 0 ? '+' : ''}${toPersian(end)}`;
+
+            let html = `<line x1="20" y1="95" x2="340" y2="95" stroke="#334155" stroke-width="2" />`;
+            const mapX = val => 180 + val * 20;
+
+            for (let i = -7; i <= 7; i++) {
+                const x = mapX(i);
+                html += `<line x1="${x}" y1="89" x2="${x}" y2="101" stroke="#334155" stroke-width="${i === 0 ? 3 : 1.5}" />`;
+                html += `<text x="${x}" y="118" text-anchor="middle" font-size="11" fill="${i === 0 ? '#e11d48' : '#475569'}" font-weight="${i === 0 ? 'bold' : 'normal'}">${toPersian(i)}</text>`;
+            }
+
+            // فلش اول از صفر به نقطه شروع
+            const x0 = mapX(0), x1 = mapX(start), x2 = mapX(end);
+            html += `<path d="M ${x0} 85 Q ${(x0 + x1) / 2} 55 ${x1} 85" fill="none" stroke="#ea580c" stroke-width="2.5" />`;
+            html += `<circle cx="${x1}" cy="85" r="4" fill="#ea580c" />`;
+
+            // فلش دوم از نقطه شروع به مقصد
+            html += `<path d="M ${x1} 75 Q ${(x1 + x2) / 2} 25 ${x2} 75" fill="none" stroke="#059669" stroke-width="2.5" stroke-dasharray="4,2" />`;
+            html += `<circle cx="${x2}" cy="85" r="6" fill="#059669" />`;
+
+            svg.innerHTML = html;
+        }
+
+        // آزمایشگاه فصل ۳: ترازوی معادله 2x + 3 = 11 (پس x=4 جواب است)
+        function updateLab3(xVal) {
+            xVal = parseInt(xVal, 10);
+            const svg = document.getElementById('lab3-svg');
+            if (!svg) return;
+            document.getElementById('lab3-x-lbl').innerText = toPersian(xVal);
+
+            const leftWeight = 2 * xVal + 3;
+            const rightWeight = 11;
+            const diff = rightWeight - leftWeight; // اگر مثبت باشد کفه راست سنگین‌تر است
+            const tilt = Math.max(-14, Math.min(14, diff * 2.5));
+
+            const statusEl = document.getElementById('lab3-status');
+            if (diff === 0) {
+                statusEl.style.color = '#059669';
+                statusEl.innerText = '✅ آفرین! ترازو کاملاً صاف شد (2×4 + 3 = 11)';
+            } else if (diff > 0) {
+                statusEl.style.color = '#e11d48';
+                statusEl.innerText = `کفه چپ سبک‌تر است (${toPersian(leftWeight)} در برابر ۱۱)`;
+            } else {
+                statusEl.style.color = '#d97706';
+                statusEl.innerText = `کفه چپ سنگین‌تر شد! (${toPersian(leftWeight)} در برابر ۱۱)`;
+            }
+
+            svg.innerHTML = `
+                <!-- پایه ترازو -->
+                <polygon points="170,85 155,155 185,155" fill="#64748b" />
+                <rect x="130" y="155" width="80" height="8" rx="4" fill="#475569" />
+                <!-- شاهین متحرک -->
+                <g transform="rotate(${tilt}, 170, 85)">
+                    <line x1="60" y1="85" x2="280" y2="85" stroke="#1e293b" stroke-width="4" stroke-linecap="round" />
+                    <!-- کفه چپ: 2x + 3 -->
+                    <rect x="35" y="55" width="32" height="26" rx="4" fill="#db2777" />
+                    <text x="51" y="72" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">x</text>
+                    <rect x="70" y="55" width="32" height="26" rx="4" fill="#db2777" />
+                    <text x="86" y="72" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">x</text>
+                    <rect x="105" y="63" width="24" height="18" rx="3" fill="#f59e0b" />
+                    <text x="117" y="76" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">۳</text>
+                    <!-- کفه راست: 11 -->
+                    <rect x="235" y="50" width="55" height="31" rx="5" fill="#0284c7" />
+                    <text x="262" y="70" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">۱۱ کیلو</text>
+                </g>
+            `;
+        }
+
+        // آزمایشگاه فصل ۴: زاویه‌های مکمل روی خط راست
+        function updateLab4(deg) {
+            deg = parseInt(deg, 10);
+            const svg = document.getElementById('lab4-svg');
+            if (!svg) return;
+            const comp = 180 - deg;
+            document.getElementById('lab4-ang-lbl').innerText = toPersian(deg) + ' درجه';
+            document.getElementById('lab4-info').innerText = `زاویه مجاور (مکمل): ${toPersian(comp)} درجه | مجموع = ۱۸۰ درجه`;
+
+            const cx = 170, cy = 140, len = 105;
+            const rad = (deg * Math.PI) / 180;
+            const x2 = cx + len * Math.cos(rad);
+            const y2 = cy - len * Math.sin(rad);
+
+            svg.innerHTML = `
+                <!-- نیم‌دایره نقاله -->
+                <path d="M 60 140 A 110 110 0 0 1 280 140" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="2" />
+                <!-- خط افقی پایه -->
+                <line x1="40" y1="140" x2="300" y2="140" stroke="#1e293b" stroke-width="3" />
+                <!-- خط زاویه متحرک -->
+                <line x1="${cx}" y1="${cy}" x2="${x2}" y2="${y2}" stroke="#059669" stroke-width="3.5" stroke-linecap="round" />
+                <circle cx="${cx}" cy="${cy}" r="5" fill="#047857" />
+                <text x="225" y="125" font-size="12" font-weight="bold" fill="#047857">${toPersian(deg)}°</text>
+                <text x="115" y="125" font-size="12" font-weight="bold" fill="#0369a1">${toPersian(comp)}°</text>
+            `;
+        }
+
+        // آزمایشگاه فصل ۵: کاشی‌کاری مستطیلی برای درک عدد اول و مرکب
+        function updateLab5(num) {
+            num = parseInt(num, 10);
+            const svg = document.getElementById('lab5-svg');
+            if (!svg) return;
+            document.getElementById('lab5-num-lbl').innerText = toPersian(num);
+
+            // پیدا کردن شمارنده‌ها
+            const divs = [];
+            for (let i = 1; i <= num; i++) {
+                if (num % i === 0) divs.push(i);
+            }
+            const isPrime = divs.length === 2;
+            const infoEl = document.getElementById('lab5-info');
+            if (isPrime) {
+                infoEl.style.color = '#059669';
+                infoEl.innerText = `✅ عدد ${toPersian(num)} اول است! (فقط ۲ شمارنده دارد: ۱ و ${toPersian(num)})`;
+            } else {
+                infoEl.style.color = '#d97706';
+                infoEl.innerText = `عدد ${toPersian(num)} مرکب است! (${toPersian(divs.length)} شمارنده دارد: ${divs.map(toPersian).join('، ')})`;
+            }
+
+            // رسم بهترین مستطیل غیرخطی اگر مرکب باشد، یا ردیف تکی اگر اول باشد
+            let rows = 1, cols = num;
+            if (!isPrime) {
+                for (let r = Math.floor(Math.sqrt(num)); r >= 2; r--) {
+                    if (num % r === 0) { rows = r; cols = num / r; break; }
+                }
+            }
+
+            const size = 20, gap = 3;
+            const totalW = cols * (size + gap);
+            const totalH = rows * (size + gap);
+            const startX = (340 - totalW) / 2;
+            const startY = (160 - totalH) / 2;
+
+            let rects = '';
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    rects += `<rect x="${startX + c * (size + gap)}" y="${startY + r * (size + gap)}" width="${size}" height="${size}" rx="4" fill="${isPrime ? '#10b981' : '#f59e0b'}" />`;
+                }
+            }
+            rects += `<text x="170" y="150" text-anchor="middle" font-size="11" fill="#475569">چیدمان مستطیلی: ${toPersian(rows)} ردیف × ${toPersian(cols)} ستون</text>`;
+            svg.innerHTML = rects;
+        }
+
+        // آزمایشگاه فصل ۶: رسم سه‌بعدی ایزومتریک مکعب مستطیل با نمایش شبکه‌بندی واحدها
+        function updateLab6() {
+            const svg = document.getElementById('lab6-svg');
+            if (!svg) return;
+            const L = parseInt(document.getElementById('lab6-l').value, 10);
+            const W = parseInt(document.getElementById('lab6-w').value, 10);
+            const H = parseInt(document.getElementById('lab6-h').value, 10);
+
+            document.getElementById('lab6-l-lbl').innerText = toPersian(L);
+            document.getElementById('lab6-w-lbl').innerText = toPersian(W);
+            document.getElementById('lab6-h-lbl').innerText = toPersian(H);
+
+            const vol = L * W * H;
+            const latArea = 2 * (L + W) * H;
+            const totArea = latArea + 2 * (L * W);
+
+            document.getElementById('lab6-stats').innerHTML = `
+                <div style="background:#fff; padding:8px; border-radius:8px; border:1px solid #cbd5e1;">
+                    <div style="color:#64748b;">حجم (تعداد مکعب‌ها)</div>
+                    <strong style="color:#0e7490; font-size:14px;">${toPersian(vol)} واحد مکعب</strong>
+                </div>
+                <div style="background:#fff; padding:8px; border-radius:8px; border:1px solid #cbd5e1;">
+                    <div style="color:#64748b;">مساحت جانبی (دور تا دور)</div>
+                    <strong style="color:#0369a1; font-size:14px;">${toPersian(latArea)} واحد مربع</strong>
+                </div>
+                <div style="background:#fff; padding:8px; border-radius:8px; border:1px solid #cbd5e1;">
+                    <div style="color:#64748b;">مساحت کل (همه وجه‌ها)</div>
+                    <strong style="color:#4f46e5; font-size:14px;">${toPersian(totArea)} واحد مربع</strong>
+                </div>
+            `;
+
+            // رسم مکعب مستطیل به صورت ایزومتریک با خطوط شبکه روی وجه‌ها
+            const unit = 20;
+            const ox = 160, oy = 185;
+            // بردارهای محورهای ایزومتریک
+            const dxL = { x: unit * 0.86, y: -unit * 0.5 };
+            const dxW = { x: -unit * 0.86, y: -unit * 0.5 };
+            const dxH = { x: 0, y: -unit };
+
+            const pt = (l, w, h) => ({
+                x: ox + l * dxL.x + w * dxW.x + h * dxH.x,
+                y: oy + l * dxL.y + w * dxW.y + h * dxH.y
+            });
+
+            const p000 = pt(0, 0, 0);
+            const pL00 = pt(L, 0, 0);
+            const p0W0 = pt(0, W, 0);
+            const p00H = pt(0, 0, H);
+            const pL0H = pt(L, 0, H);
+            const p0WH = pt(0, W, H);
+            const pLWH = pt(L, W, H);
+
+            let html = '';
+            // وجه بالایی
+            html += `<polygon points="${p00H.x},${p00H.y} ${pL0H.x},${pL0H.y} ${pLWH.x},${pLWH.y} ${p0WH.x},${p0WH.y}" fill="#67e8f9" stroke="#0e7490" stroke-width="1.5" />`;
+            // وجه راست (طول × ارتفاع)
+            html += `<polygon points="${p000.x},${p000.y} ${pL00.x},${pL00.y} ${pL0H.x},${pL0H.y} ${p00H.x},${p00H.y}" fill="#22d3ee" stroke="#0e7490" stroke-width="1.5" />`;
+            // وجه چپ (عرض × ارتفاع)
+            html += `<polygon points="${p000.x},${p000.y} ${p0W0.x},${p0W0.y} ${p0WH.x},${p0WH.y} ${p00H.x},${p00H.y}" fill="#06b6d4" stroke="#0e7490" stroke-width="1.5" />`;
+
+            // خطوط شبکه برای نمایش مکعب‌های واحد
+            for (let i = 1; i < L; i++) {
+                const a = pt(i, 0, 0), b = pt(i, 0, H), c = pt(i, W, H);
+                html += `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="#0e7490" stroke-width="0.7" opacity="0.6" />`;
+                html += `<line x1="${b.x}" y1="${b.y}" x2="${c.x}" y2="${c.y}" stroke="#0e7490" stroke-width="0.7" opacity="0.6" />`;
+            }
+            for (let j = 1; j < W; j++) {
+                const a = pt(0, j, 0), b = pt(0, j, H), c = pt(L, j, H);
+                html += `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="#0e7490" stroke-width="0.7" opacity="0.6" />`;
+                html += `<line x1="${b.x}" y1="${b.y}" x2="${c.x}" y2="${c.y}" stroke="#0e7490" stroke-width="0.7" opacity="0.6" />`;
+            }
+            for (let k = 1; k < H; k++) {
+                const a = pt(L, 0, k), b = pt(0, 0, k), c = pt(0, W, k);
+                html += `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="#0e7490" stroke-width="0.7" opacity="0.6" />`;
+                html += `<line x1="${b.x}" y1="${b.y}" x2="${c.x}" y2="${c.y}" stroke="#0e7490" stroke-width="0.7" opacity="0.6" />`;
+            }
+
+            // برچسب ابعاد
+            html += `<text x="${(p000.x + pL00.x)/2 + 12}" y="${(p000.y + pL00.y)/2 + 14}" font-size="11" font-weight="bold" fill="#0f172a">طول=${toPersian(L)}</text>`;
+            html += `<text x="${(p000.x + p0W0.x)/2 - 38}" y="${(p000.y + p0W0.y)/2 + 14}" font-size="11" font-weight="bold" fill="#0f172a">عرض=${toPersian(W)}</text>`;
+            html += `<text x="${pL00.x + 8}" y="${(pL00.y + pL0H.y)/2}" font-size="11" font-weight="bold" fill="#0f172a">ارتفاع=${toPersian(H)}</text>`;
+
+            svg.innerHTML = html;
+        }
+
+        // آزمایشگاه فصل ۷: درخت تقسیم توان ۲
+        function updateLab7(pow) {
+            pow = parseInt(pow, 10);
+            const svg = document.getElementById('lab7-svg');
+            if (!svg) return;
+            document.getElementById('lab7-pow-lbl').innerText = toPersian(pow);
+            const val = Math.pow(2, pow);
+            const multStr = Array(pow).fill('۲').join(' × ');
+            document.getElementById('lab7-info').innerText = `2^${toPersian(pow)} = ${multStr} = ${toPersian(val)} سلول`;
+
+            let html = '';
+            for (let level = 0; level <= pow; level++) {
+                const count = Math.pow(2, level);
+                const y = 20 + level * 28;
+                const step = 320 / (count + 1);
+                for (let i = 0; i < count; i++) {
+                    const x = 10 + (i + 1) * step;
+                    if (level < pow) {
+                        const nextStep = 320 / (count * 2 + 1);
+                        const xLeft = 10 + (i * 2 + 1) * nextStep;
+                        const xRight = 10 + (i * 2 + 2) * nextStep;
+                        html += `<line x1="${x}" y1="${y}" x2="${xLeft}" y2="${y + 28}" stroke="#fcd34d" stroke-width="1.5" />`;
+                        html += `<line x1="${x}" y1="${y}" x2="${xRight}" y2="${y + 28}" stroke="#fcd34d" stroke-width="1.5" />`;
+                    }
+                    html += `<circle cx="${x}" cy="${y}" r="${level === pow ? 5 : 4}" fill="${level === pow ? '#d97706' : '#f59e0b'}" />`;
+                }
+            }
+            svg.innerHTML = html;
+        }
+
+        // آزمایشگاه فصل ۸: دستگاه مختصات و بردار انتقال
+        function updateLab8() {
+            const svg = document.getElementById('lab8-svg');
+            if (!svg) return;
+            const vx = parseInt(document.getElementById('lab8-x').value, 10);
+            const vy = parseInt(document.getElementById('lab8-y').value, 10);
+
+            document.getElementById('lab8-x-lbl').innerText = (vx > 0 ? '+' : '') + toPersian(vx);
+            document.getElementById('lab8-y-lbl').innerText = (vy > 0 ? '+' : '') + toPersian(vy);
+
+            const ax = 0, ay = 0;
+            const bx = ax + vx, by = ay + vy;
+            document.getElementById('lab8-info').innerText = `شروع از مبدأ (۰ و ۰) + بردار [${toPersian(vx)} و ${toPersian(vy)}] = نقطه (${toPersian(bx)} و ${toPersian(by)})`;
+
+            const cx = 140, cy = 110, step = 22;
+            let html = '';
+            // خطوط شطرنجی
+            for (let i = -5; i <= 5; i++) {
+                html += `<line x1="${cx + i * step}" y1="10" x2="${cx + i * step}" y2="210" stroke="#e2e8f0" stroke-width="1" />`;
+                html += `<line x1="20" y1="${cy + i * step}" x2="260" y2="${cy + i * step}" stroke="#e2e8f0" stroke-width="1" />`;
+            }
+            // محورهای اصلی
+            html += `<line x1="20" y1="${cy}" x2="260" y2="${cy}" stroke="#475569" stroke-width="2" />`;
+            html += `<line x1="${cx}" y1="10" x2="${cx}" y2="210" stroke="#475569" stroke-width="2" />`;
+
+            // بردار
+            const x2 = cx + bx * step;
+            const y2 = cy - by * step;
+            html += `<line x1="${cx}" y1="${cy}" x2="${x2}" y2="${y2}" stroke="#c026d3" stroke-width="3.5" stroke-linecap="round" />`;
+            html += `<circle cx="${cx}" cy="${cy}" r="4" fill="#1e293b" />`;
+            html += `<circle cx="${x2}" cy="${y2}" r="6" fill="#a21caf" />`;
+
+            svg.innerHTML = html;
+        }
+
+        // آزمایشگاه فصل ۹: شبیه‌ساز تاس
+        let diceCounts = [0, 0, 0, 0, 0, 0];
+        function rollDiceSim(times) {
+            for (let i = 0; i < times; i++) {
+                const face = Math.floor(Math.random() * 6);
+                diceCounts[face]++;
+            }
+            renderDiceChart();
+        }
+        function resetDiceSim() {
+            diceCounts = [0, 0, 0, 0, 0, 0];
+            renderDiceChart();
+        }
+        function renderDiceChart() {
+            const svg = document.getElementById('lab9-svg');
+            if (!svg) return;
+            const total = diceCounts.reduce((a, b) => a + b, 0);
+            const maxVal = Math.max(5, ...diceCounts);
+            document.getElementById('lab9-info').innerText = `تعداد کل پرتاب‌ها: ${toPersian(total)} بار | احتمال نظری هر وجه: ۱/۶ (حدود ۱۶.۶٪)`;
+
+            let html = `<line x1="30" y1="130" x2="310" y2="130" stroke="#334155" stroke-width="2" />`;
+            for (let i = 0; i < 6; i++) {
+                const barH = (diceCounts[i] / maxVal) * 95;
+                const x = 45 + i * 44;
+                const y = 130 - barH;
+                html += `<rect x="${x}" y="${y}" width="28" height="${barH}" rx="4" fill="#0d9488" />`;
+                html += `<text x="${x + 14}" y="146" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">وجه ${toPersian(i + 1)}</text>`;
+                html += `<text x="${x + 14}" y="${y - 5}" text-anchor="middle" font-size="11" fill="#0f766e">${toPersian(diceCounts[i])}</text>`;
+            }
+            svg.innerHTML = html;
+        }
+
+        // =========================================================================
+        // ۴. بانک محتوای مفهومی، تمرین‌های متعدد (۳ تمرین برای هر زیرفصل) و آزمون‌های جامع (۴ سوال برای هر زیرفصل)
+        // =========================================================================
+        function getLessonData(subId, subTitle, chapterId) {
+            const specificBank = {
+                "6-1": {
+                    conceptTitle: "درک عملی حجم‌های هندسی: پر کردن جعبه با مکعب‌های واحد!",
+                    conceptDesc: "حجم یعنی «فضایی که یک جسم اشغال می‌کند». به جای حفظ کردن فرمول، در آزمایشگاه زیر طول، عرض و ارتفاع را تغییر دهید و بشمارید چند مکعب کوچک در آن جا می‌شود.",
+                    practices: [
+                        { q: "یک جعبه مکعب مستطیل به طول ۵، عرض ۲ و ارتفاع ۳ سانتی‌متر داریم. چند مکعب ۱×۱×۱ سانتی‌متری داخل آن جا می‌شود؟", hint: "تعداد مکعب‌ها در کف جعبه ۵×۲=۱۰ تاست و ۳ طبقه روی هم داریم.", answer: "30", errorTag: "جمع کردن ابعاد به جای ضرب کردن آن‌ها در محاسبه حجم" },
+                        { q: "حجم مکعب مربعی که هر ضلع آن ۴ سانتی‌متر است چند سانتی‌متر مکعب است؟", hint: "در مکعب مربع طول، عرض و ارتفاع هر سه برابر ۴ هستند (۴ × ۴ × ۴).", answer: "64", errorTag: "محاسبه مساحت یک وجه (۴×۴=۱۶) به جای حجم کل مکعب" },
+                        { q: "اگر حجم یک منشور ۴۵ سانتی‌متر مکعب و مساحت قاعده آن ۹ سانتی‌متر مربع باشد، ارتفاع منشور چند سانتی‌متر است؟", hint: "حجم = مساحت قاعده × ارتفاع؛ پس ۴۵ را بر ۹ تقسیم کنید.", answer: "5", errorTag: "اشتباه در پیدا کردن ارتفاع از روی حجم و مساحت قاعده" }
+                    ],
+                    exam: [
+                        { q: "واحد اندازه‌گیری حجم کدام یک از گزینه‌های زیر است؟", options: ["سانتی‌متر", "سانتی‌متر مربع", "سانتی‌متر مکعب", "درجه"], correct: 2, errorType: "عدم تفکیک واحد طول، مساحت و حجم" },
+                        { q: "اگر طول، عرض و ارتفاع یک مکعب مستطیل را دو برابر کنیم، حجم آن چند برابر می‌شود؟", options: ["۲ برابر", "۴ برابر", "۶ برابر", "۸ برابر"], correct: 3, errorType: "تصور اینکه دو برابر شدن ابعاد حجم را فقط دو برابر می‌کند (۲×۲×۲ = ۸ برابر)" },
+                        { q: "حجم استوانه‌ای به مساحت قاعده ۲۰ و ارتفاع ۶ چقدر است؟", options: ["۲۶", "۱۲۰", "۶۰", "۲۴۰"], correct: 1, errorType: "عدم تعمیم فرمول کلی حجم منشور (مساحت قاعده × ارتفاع) به استوانه" },
+                        { q: "یک لیتر دقیقاً معادل کدام حجم زیر است؟", options: ["۱ سانتی‌متر مکعب", "۱۰۰ سانتی‌متر مکعب", "۱۰۰۰ سانتی‌متر مکعب", "۱۰ سانتی‌متر مکعب"], correct: 2, errorType: "تبدیل واحدهای حجم و گنجایش (لیتر و سانتی‌متر مکعب)" }
+                    ]
+                },
+                "6-3": {
+                    conceptTitle: "درک عملی مساحت جانبی و کل: باز کردن جعبه مقوایی!",
+                    conceptDesc: "اگر یک جعبه را با قیچی ببرید و روی میز پهن کنید، مساحت دیواره‌های دور تا دور آن می‌شود «مساحت جانبی» و اگر مساحت کف و سقف را هم اضافه کنید می‌شود «مساحت کل».",
+                    practices: [
+                        { q: "محیط قاعده یک منشور ۱۲ سانتی‌متر و ارتفاع آن ۵ سانتی‌متر است. مساحت جانبی آن چند سانتی‌متر مربع است؟", hint: "مساحت جانبی = محیط قاعده × ارتفاع (۱۲ × ۵).", answer: "60", errorTag: "اشتباه گرفتن فرمول مساحت جانبی (محیط قاعده × ارتفاع) با فرمول حجم" },
+                        { q: "یک مکعب مربع به ضلع ۳ سانتی‌متر را می‌خواهیم کاملاً رنگ کنیم. مساحت کل آن چند سانتی‌متر مربع است؟", hint: "مکعب ۶ وجه مربع شکل دارد. مساحت هر وجه ۳×۳=۹ است؛ پس ۶ × ۹.", answer: "54", errorTag: "فراموش کردن اینکه مکعب ۶ وجه مساوی دارد" },
+                        { q: "اگر مساحت جانبی یک منشور ۴۰ و مساحت هر قاعده آن ۱۰ سانتی‌متر مربع باشد، مساحت کل آن چقدر است؟", hint: "منشور دو قاعده (بالا و پایین) دارد: ۴۰ + ۱۰ + ۱۰.", answer: "60", errorTag: "اضافه کردن فقط یک قاعده به جای دو قاعده در محاسبه مساحت کل" }
+                    ],
+                    exam: [
+                        { q: "فرمول کلی محاسبه مساحت جانبی هر منشور کدام است؟", options: ["مساحت قاعده × ارتفاع", "محیط قاعده × ارتفاع", "طول × عرض × ارتفاع", "محیط قاعده + ارتفاع"], correct: 1, errorType: "استفاده از مساحت قاعده به جای محیط قاعده در مساحت جانبی" },
+                        { q: "مساحت کل منشور از کدام رابطه به دست می‌آید؟", options: ["مساحت جانبی + مساحت یک قاعده", "مساحت جانبی + مساحت دو قاعده", "حجم × ۲", "محیط قاعده × ۲"], correct: 1, errorType: "فراموش کردن قاعده دوم منشور در مساحت کل" },
+                        { q: "برای کاغذ دیواری کردن دیوارهای یک اتاق (بدون سقف و کف) کدام را محاسبه می‌کنیم؟", options: ["حجم اتاق", "مساحت کل", "مساحت جانبی", "محیط کف"], correct: 2, errorType: "عدم تشخیص کاربرد واقعی مساحت جانبی در مسائل زندگی" },
+                        { q: "اگر ضلع یک مکعب را نصف کنیم، مساحت کل آن چه تغییری می‌کند؟", options: ["نصف می‌شود", "یک‌چهارم می‌شود", "یک‌هشتم می‌شود", "تغییر نمی‌کند"], correct: 1, errorType: "تفاوت تغییر مساحت (توان ۲) و تغییر حجم (توان ۳)" }
+                    ]
+                }
+            };
+
+            if (specificBank[subId]) {
+                return specificBank[subId];
+            }
+
+            // تولید بانک سوالات غنی (۳ تمرین + ۴ سوال آزمون) برای تمام زیرفصل‌های دیگر
+            return buildRichChapterModule(subId, subTitle, chapterId);
+        }
+
+        function buildRichChapterModule(subId, subTitle, chapterId) {
+            const templates = {
+                1: {
+                    title: "درک عملی: شکستن مسئله با رسم شکل و الگوسازی",
+                    desc: "در ریاضی هفتم، مهم‌تر از رسیدن به جواب، انتخاب «راهبرد درست» است. در آزمایشگاه زیر تعداد تیم‌ها را تغییر دهید تا ببینید چطور یک مسئله پیچیده با رسم چند نقطه و خط به سادگی حل می‌شود.",
+                    practices: [
+                        { q: "در یک کلاس ۶ دانش‌آموز با یکدیگر دست می‌دهند. در مجموع چند بار دست دادن انجام می‌شود؟", hint: "نفر اول با ۵ نفر، نفر دوم با ۴ نفر... (۵ + ۴ + ۳ + ۲ + ۱)", answer: "15", errorTag: "شمارش تکراری دست دادن دو نفر (ضرب ۶ در ۵ بدون تقسیم بر ۲)" },
+                        { q: "توپی از ارتفاع ۲۴ متری رها می‌شود و هر بار نصف ارتفاع قبلی بالا می‌آید. بعد از سومین برخورد به زمین تا چه ارتفاعی بالا می‌آید؟", hint: "۲۴ -> برخورد اول (۱۲) -> برخورد دوم (۶) -> برخورد سوم (؟)", answer: "3", errorTag: "اشتباه در شمارش تعداد دفعات نصف کردن ارتفاع" },
+                        { q: "مجموع سن علی و پدرش ۴۴ سال است. اگر پدر ۲۸ سال از علی بزرگ‌تر باشد، سن علی چند سال است؟", hint: "ابتدا ۲۸ را از ۴۴ کم کنید (۱۶) و سپس نصف کنید.", answer: "8", errorTag: "تقسیم مستقیم ۴۴ بر ۲ بدون کم کردن اختلاف سنی" }
+                    ],
+                    exam: [
+                        { q: "برای پیدا کردن دو عدد که مجموعشان ۱۹ و حاصل‌ضربشان ۸۴ است، کدام راهبرد مناسب‌تر است؟", options: ["حدس و آزمایش نظام‌دار", "رسم شکل هندسی", "زیرمسئله", "حذف حالت‌های نامطلوب"], correct: 0, errorType: "عدم شناخت کاربرد راهبرد حدس و آزمایش" },
+                        { q: "یک طناب را با ۵ برش به چند قطعه تقسیم می‌کنیم؟", options: ["۴ قطعه", "۵ قطعه", "۶ قطعه", "۱۰ قطعه"], correct: 2, errorType: "اشتباه گرفتن تعداد برش‌ها با تعداد قطعات نهایی" },
+                        { q: "با ارقام ۱، ۴ و ۷ چند عدد سه‌رقمی با ارقام غیرتکراری ساخته می‌شود؟", options: ["۳", "۶", "۹", "۱۲"], correct: 1, errorType: "عدم استفاده از الگوسازی منظم برای شمارش حالت‌ها" },
+                        { q: "در الگوی ۱، ۴، ۹، ۱۶، ... عدد بعدی کدام است؟", options: ["۲۰", "۲۴", "۲۵", "۳۶"], correct: 2, errorType: "عدم تشخیص الگوی اعداد مربعی (۱×۱، ۲×۲، ۳×۳، ۴×۴، ۵×۵)" }
+                    ]
+                },
+                2: {
+                    title: `درک عملی ${subTitle}: حرکت روی محور و حساب سود و زیان`,
+                    desc: "عددهای مثبت و منفی جهت حرکت را نشان می‌دهند. در آزمایشگاه زیر نقطه شروع و میزان حرکت را تغییر دهید تا نتیجه جمع و تفریق اعداد صحیح را به صورت بصری ببینید.",
+                    practices: [
+                        { q: "دمای هوا در صبح ۴- درجه بود و تا ظهر ۹ درجه گرم‌تر شد. دمای ظهر چند درجه است؟", hint: "از ۴- روی محور ۹ واحد به سمت راست (مثبت) حرکت کنید.", answer: "5", errorTag: "کم کردن اشتباه یا گذاشتن علامت منفی برای عدد بزرگ‌تر" },
+                        { q: "حاصل عبارت (۱۲-) + (۷-) چه عددی می‌شود؟", hint: "هر دو عدد منفی هستند (دو بدهی کنار هم جمع می‌شوند).", answer: "-19", errorTag: "مثبت کردن حاصل جمع دو عدد منفی (اشتباه گرفتن جمع با ضرب)" },
+                        { q: "حاصل ضرب (۵-) × (۴+) کدام عدد صحیح است؟", hint: "ضرب دو عدد غیرهم‌علامت همیشه منفی است.", answer: "-20", errorTag: "فراموش کردن علامت منفی در ضرب عدد منفی در مثبت" }
+                    ],
+                    exam: [
+                        { q: "حاصل عبارت (۸-) - (۳-) کدام است؟", options: ["۱۱-", "۵-", "۵+", "۱۱+"], correct: 1, errorType: "تبدیل نکردن تفریق به جمع با قرینه: (۸-) + (۳+) = ۵-" },
+                        { q: "کدام یک از اعداد زیر از بقیه کوچک‌تر است؟", options: ["۱-", "۰", "۹-", "۴-"], correct: 2, errorType: "مقایسه نادرست اعداد منفی (عدد منفی بزرگ‌تر از نظر مقدار، ارزش کمتری دارد)" },
+                        { q: "حاصل تقسیم (۲۴-) بر (۶-) کدام است؟", options: ["۴-", "۴+", "۱۸-", "۳۰-"], correct: 1, errorType: "منفی نوشتن حاصل تقسیم دو عدد هم‌علامت" },
+                        { q: "مجموع تمام عددهای صحیح بین ۳- و ۳+ کدام است؟", options: ["۶", "۳", "۰", "۶-"], correct: 2, errorType: "عدم توجه به خنثی شدن اعداد قرینه در جمع" }
+                    ]
+                },
+                3: {
+                    title: `درک عملی ${subTitle}: تعادل ترازو و جعبه‌های مجهول`,
+                    desc: "در جبر، حروفی مثل x نماینده یک جعبه بسته هستند. در آزمایشگاه ترازوی زیر، مقدار مجهول x را تغییر دهید تا دو کفه ترازو کاملاً هم‌تراز شوند.",
+                    practices: [
+                        { q: "اگر x = 3 باشد، مقدار عددی عبارت جبری 4x - 5 چند می‌شود؟", hint: "ابتدا ۴ را در ۳ ضرب کنید (۱۲) و سپس ۵ را کم کنید.", answer: "7", errorTag: "قرار دادن ۳ کنار ۴ (ساختن عدد ۴۳) به جای ضرب کردن" },
+                        { q: "جواب معادله 3x + 2 = 17 کدام عدد است؟", hint: "ابتدا ۲ را از ۱۷ کم کنید (۱۵) و سپس بر ۳ تقسیم کنید.", answer: "5", errorTag: "جمع کردن ۲ با ۱۷ به جای کم کردن آن" },
+                        { q: "ساده شده عبارت 5a + 2b - 2a + 3b دارای چند a است؟ (فقط ضریب a را بنویسید)", hint: "جملات متشابه a را با هم جمع و تفریق کنید: 5a - 2a", answer: "3", errorTag: "جمع کردن ضرایب a و b با یکدیگر" }
+                    ],
+                    exam: [
+                        { q: "کدام دو جمله زیر متشابه هستند؟", options: ["3x و 3y", "4a و 7a", "2x و 2", "5ab و 5a"], correct: 1, errorType: "تشخیص نادرست جملات متشابه (باید قسمت حرفی کاملاً یکسان باشد)" },
+                        { q: "جواب معادله 2x - 6 = 10 کدام است؟", options: ["۲", "۴", "۸", "۱۶"], correct: 2, errorType: "کم کردن ۶ از ۱۰ به جای انتقال با علامت مثبت" },
+                        { q: "عبارت جبری «نصف عددی به علاوه ۴» کدام است؟", options: ["2x + 4", "x/2 + 4", "x + 4/2", "4x + 2"], correct: 1, errorType: "تبدیل نادرست عبارت کلامی به عبارت جبری" },
+                        { q: "اگر y = -2 باشد، مقدار 3y + 10 کدام است؟", options: ["۱۶", "۴", "۴-", "۱۶-"], correct: 1, errorType: "اشتباه در ضرب عدد مثبت در مقدار منفی متغیر" }
+                    ]
+                },
+                4: {
+                    title: `درک عملی ${subTitle}: اندازه‌گیری، زاویه‌ها و تبدیل‌های هندسی`,
+                    desc: "در هندسه با استدلال منطقی بدون نیاز به اندازه‌گیری با خط‌کش و نقاله، اندازه قطعات مجهول را پیدا می‌کنیم. با نقاله زنده زیر زاویه‌های مکمل را آزمایش کنید.",
+                    practices: [
+                        { q: "مکمل زاویه ۶۵ درجه چند درجه است؟", hint: "مجموع دو زاویه مکمل ۱۸۰ درجه است (۱۸۰ منهای ۶۵).", answer: "115", errorTag: "کم کردن زاویه از ۹۰ (متمم) به جای ۱۸۰ (مکمل)" },
+                        { q: "متمم زاویه ۴۰ درجه چند درجه است؟", hint: "مجموع دو زاویه متمم ۹۰ درجه است (۹۰ منهای ۴۰).", answer: "50", errorTag: "کم کردن زاویه از ۱۸۰ به جای ۹۰" },
+                        { q: "نقطه M وسط پاره‌خط AB به طول ۱۴ سانتی‌متر است. طول AM چند سانتی‌متر است؟", hint: "نقطه وسط، پاره‌خط را به دو قسمت مساوی تقسیم می‌کند.", answer: "7", errorTag: "بی‌دقتی در تقسیم طول پاره‌خط به دو نیمه مساوی" }
+                    ],
+                    exam: [
+                        { q: "دو زاویه متقابل به رأس همیشه با هم چه رابطه‌ای دارند؟", options: ["مکمل‌اند", "متمم‌اند", "مساوی‌اند", "مجموعشان ۳۶۰ است"], correct: 2, errorType: "عدم تسلط بر ویژگی تساوی زاویه‌های متقابل به رأس" },
+                        { q: "کدام تبدیل هندسی جهت شکل را تغییر نمی‌دهد و فقط آن را جابه‌جا می‌کند؟", options: ["تقارن محوری", "دوران ۹۰ درجه", "انتقال", "قرینه مرکزی"], correct: 2, errorType: "تشخیص نادرست ویژگی‌های انتقال هندسی" },
+                        { q: "در دو مثلث هم‌نهشت، کدام مورد همیشه برقرار است؟", options: ["فقط مساحتشان برابر است", "فقط محیطشان برابر است", "تمام اجزای متناظر برابرند", "فقط زاویه‌ها برابرند"], correct: 2, errorType: "درک ناقص از مفهوم هم‌نهشتی (تساوی کامل اضلاع و زاویه‌های متناظر)" },
+                        { q: "نیمساز یک زاویه ۸۰ درجه‌ای، آن را به دو زاویه چند درجه‌ای تقسیم می‌کند؟", options: ["۲۰ درجه", "۴۰ درجه", "۸۰ درجه", "۱۶۰ درجه"], correct: 1, errorType: "عدم آشنایی با تعریف نیمساز زاویه" }
+                    ]
+                },
+                5: {
+                    title: `درک عملی ${subTitle}: کاشی‌کاری اعداد و تجزیه به عوامل اول`,
+                    desc: "اعداد اول آجرهای سازنده تمام اعداد دیگر هستند. در آزمایشگاه زیر اعداد مختلف را انتخاب کنید تا ببینید کدام اعداد فقط یک مستطیل تک‌ردیفه می‌سازند (اعداد اول).",
+                    practices: [
+                        { q: "بزرگ‌ترین شمارنده مشترک (ب.م.م) دو عدد ۱۸ و ۲۴ کدام است؟", hint: "بزرگ‌ترین عددی که هم ۱۸ و هم ۲۴ بر آن بخش‌پذیرند.", answer: "6", errorTag: "پیدا کردن یک شمارنده مشترک کوچک (مثل ۲ یا ۳) به جای بزرگ‌ترین آن" },
+                        { q: "کوچک‌ترین مضرب مشترک (ک.م.م) دو عدد ۴ و ۶ کدام است؟", hint: "مضرب‌های ۶ را بنویسید (۶، ۱۲، ۱۸...) اولین عددی که بر ۴ بخش‌پذیر است.", answer: "12", errorTag: "ضرب کردن دو عدد در هم (۲۴) بدون توجه به کوچک‌ترین مضرب" },
+                        { q: "بین اعداد ۱۵، ۱۷، ۲۱ و ۲۷ کدام یک عدد اول است؟", hint: "۱۵ بر ۳ و ۵، ۲۱ بر ۳ و ۷، و ۲۷ بر ۳ و ۹ بخش‌پذیر است.", answer: "17", errorTag: "اول فرض کردن اعداد فردی مثل ۲۱ یا ۲۷" }
+                    ],
+                    exam: [
+                        { q: "تنها عدد اول زوج کدام است؟", options: ["۰", "۱", "۲", "۴"], correct: 2, errorType: "فراموش کردن اینکه عدد ۲ تنها عدد اول زوج است" },
+                        { q: "عدد ۱ جزء کدام دسته از اعداد است؟", options: ["اعداد اول", "اعداد مرکب", "نه اول و نه مرکب", "اعداد زوج"], correct: 2, errorType: "اول در نظر گرفتن عدد ۱ (عدد ۱ فقط یک شمارنده دارد)" },
+                        { q: "ب.م.م دو عدد اول متمایز (مثل ۵ و ۷) همیشه برابر با چند است؟", options: ["۰", "۱", "حاصل‌ضربشان", "مجموعشان"], correct: 1, errorType: "عدم شناخت ویژگی اعداد نسبت به هم اول" },
+                        { q: "در تجزیه درختی عدد ۱۲ به عوامل اول، کدام گزینه درست است؟", options: ["2 × 6", "3 × 4", "2 × 2 × 3", "1 × 12"], correct: 2, errorType: "ناتمام گذاشتن تجزیه درختی با باقی ماندن عدد مرکب (مثل ۶ یا ۴)" }
+                    ]
+                },
+                6: {
+                    title: `درک عملی ${subTitle}: شبیه‌ساز سه‌بعدی حجم و مساحت منشور`,
+                    desc: "در آزمایشگاه زیر طول، عرض و ارتفاع مکعب مستطیل را تغییر دهید و هم‌زمان تعداد مکعب‌های واحد (حجم) و مساحت دیواره‌ها (مساحت جانبی و کل) را مشاهده کنید.",
+                    practices: [
+                        { q: "حجم مکعب مستطیلی به ابعاد ۴، ۳ و ۵ سانتی‌متر چند سانتی‌متر مکعب است؟", hint: "طول × عرض × ارتفاع (۴ × ۳ × ۵).", answer: "60", errorTag: "اشتباه در ضرب سه عدد برای محاسبه حجم" },
+                        { q: "مساحت قاعده یک منشور ۱۵ و ارتفاع آن ۴ سانتی‌متر است. حجم منشور چقدر است؟", hint: "حجم منشور = مساحت قاعده × ارتفاع (۱۵ × ۴).", answer: "60", errorTag: "فراموش کردن فرمول کلی حجم منشور" },
+                        { q: "مکعب مربعی به ضلع ۲ سانتی‌متر دارای چند سانتی‌متر مربع مساحت کل است؟", hint: "هر وجه مساحت ۲×۲=۴ دارد و مکعب ۶ وجه دارد (۶ × ۴).", answer: "24", errorTag: "محاسبه حجم (۸) به جای مساحت کل (۲۴)" }
+                    ],
+                    exam: [
+                        { q: "برای پیدا کردن حجم هر منشور، کدام دو مقدار را در هم ضرب می‌کنیم؟", options: ["محیط قاعده و ارتفاع", "مساحت قاعده و ارتفاع", "طول و عرض", "مساحت کل و ارتفاع"], correct: 1, errorType: "اشتباه گرفتن مساحت قاعده با محیط قاعده" },
+                        { q: "تعداد یال‌های یک مکعب مربع چند تاست؟", options: ["۶", "۸", "۱۲", "۴"], correct: 2, errorType: "عدم تشخیص تفاوت وجه (۶)، رأس (۸) و یال (۱۲)" },
+                        { q: "مساحت جانبی استوانه‌ای به محیط قاعده ۱۰ و ارتفاع ۷ چقدر است؟", options: ["۱۷", "۷۰", "۳۵", "۱۴۰"], correct: 1, errorType: "عدم کاربرد فرمول محیط قاعده × ارتفاع برای استوانه" },
+                        { q: "حجم یک منشور مثلثی به مساحت قاعده ۱۲ و ارتفاع ۵ کدام است؟", options: ["۶۰", "۳۰", "۱۷", "۲۴"], correct: 0, errorType: "نصف کردن بی‌مورد حجم به خاطر مثلثی بودن قاعده (در حالی که مساحت قاعده آماده داده شده)" }
+                    ]
+                },
+                7: {
+                    title: `درک عملی ${subTitle}: رشد نمایی توان و جذر مربع`,
+                    desc: "توان یعنی ضرب تکراری یک عدد در خودش، و جذر دقیقاً عمل عکس توان دو است (پیدا کردن ضلع مربع از روی مساحت آن). در آزمایشگاه زیر رشد درختی توان را ببینید.",
+                    practices: [
+                        { q: "مقدار عددی ۵ به توان ۲ (5²) کدام عدد است؟", hint: "۵ را دو بار در خودش ضرب کنید (۵ × ۵)، نه ۵ × ۲!", answer: "25", errorTag: "ضرب کردن پایه در توان (۵×۲=۱۰) به جای ضرب تکراری پایه" },
+                        { q: "جذر عدد ۸۱ کدام عدد است؟", hint: "چه عددی در خودش ضرب شود حاصل ۸۱ می‌شود؟", answer: "9", errorTag: "تقسیم کردن عدد بر ۲ به جای پیدا کردن ریشه دوم" },
+                        { q: "حاصل عبارت 2³ + 3² چه عددی می‌شود؟", hint: "2³ = 8 و 3² = 9؛ حالا این دو را با هم جمع کنید.", answer: "17", errorTag: "جمع کردن پایه‌ها و توان‌ها با هم" }
+                    ],
+                    exam: [
+                        { q: "حاصل عبارت (1-) به توان ۱۰۰ کدام است؟", options: ["۱۰۰-", "۱-", "۱+", "۱۰۰+"], correct: 2, errorType: "عدم توجه به زوج بودن توان برای پایه منفی" },
+                        { q: "کدام یک از اعداد زیر مربع کامل است (جذر دقیق دارد)؟", options: ["۲۰", "۳۶", "۵۰", "۱۲"], correct: 1, errorType: "عدم تشخیص اعداد مربع کامل" },
+                        { q: "حاصل 3⁴ × 3² به صورت عدد توان‌دار کدام است؟", options: ["3⁶", "3⁸", "9⁶", "6⁶"], correct: 0, errorType: "ضرب کردن توان‌ها به جای جمع کردن آن‌ها در ضرب پایه‌های مساوی" },
+                        { q: "جذر عدد ۶۴ کدام است؟", options: ["۳۲", "۱۶", "۸", "۴"], correct: 2, errorType: "نصف کردن عدد (۳۲) به جای گرفتن جذر (۸)" }
+                    ]
+                },
+                8: {
+                    title: `درک عملی ${subTitle}: مسیریابی در صفحه مختصات با بردار`,
+                    desc: "بردار یک حرکت جهت‌دار است که دو دستور دارد: چقدر افقی برویم (مؤلفه اول) و چقدر عمودی برویم (مؤلفه دوم). با آزمایشگاه مختصات زیر حرکت بردار را کنترل کنید.",
+                    practices: [
+                        { q: "نقطه A(2, 5) با بردار [3, -2] منتقل می‌شود. طول (مؤلفه اول) نقطه جدید چند است؟", hint: "مؤلفه اول نقطه را با مؤلفه اول بردار جمع کنید: ۲ + ۳.", answer: "5", errorTag: "جمع کردن طول نقطه با عرض بردار" },
+                        { q: "در سوال قبل، عرض (مؤلفه دوم) نقطه جدید چند می‌شود؟", hint: "مؤلفه دوم نقطه را با مؤلفه دوم بردار جمع کنید: ۵ + (۲-).", answer: "3", errorTag: "اشتباه در جمع عدد مثبت و منفی در مؤلفه دوم" },
+                        { q: "اگر بردار انتقال از نقطه (1, 1) به (4, 1) باشد، مؤلفه افقی این بردار چند است؟", hint: "مختصات مقصد منهای مختصات مبدأ: ۴ منهای ۱.", answer: "3", errorTag: "کم کردن مبدأ از مقصد به صورت برعکس" }
+                    ],
+                    exam: [
+                        { q: "دو بردار مساوی چه ویژگی‌هایی دارند؟", options: ["فقط هم‌اندازه‌اند", "فقط هم‌جهت‌اند", "هم‌اندازه، هم‌جهت و موازی‌اند", "نقطه شروع یکسان دارند"], correct: 2, errorType: "تصور اینکه بردارهای مساوی حتماً باید نقطه شروع یکسان داشته باشند" },
+                        { q: "قرینه بردار [4-, 7] کدام بردار است؟", options: ["[4, 7-]", "[7-, 4]", "[4-, 7-]", "[4, 7]"], correct: 0, errorType: "قرینه کردن فقط یکی از مؤلفه‌ها و فراموش کردن دیگری" },
+                        { q: "نقطه (0, -5) روی کدام محور مختصات قرار دارد؟", options: ["محور طول‌ها (x)", "محور عرض‌ها (y)", "ناحیه اول", "ناحیه سوم"], correct: 1, errorType: "جابه‌جا گرفتن محور طول‌ها و عرض‌ها هنگام صفر بودن یک مؤلفه" },
+                        { q: "حاصل جمع دو بردار قرینه همیشه برابر با چیست؟", options: ["بردار واحد", "بردار صفر [0, 0]", "عدد ۱", "بی‌نهایت"], correct: 1, errorType: "عدم آشنایی با مفهوم بردار صفر" }
+                    ]
+                },
+                9: {
+                    title: `درک عملی ${subTitle}: تحلیل نمودارها و اندازه‌گیری احتمال`,
+                    desc: "احتمال یعنی نسبت تعداد حالت‌های مطلوب به کل حالت‌های ممکن. در آزمایشگاه زیر تاس را بارها پرتاب کنید تا ببینید چطور احتمال تجربی به احتمال نظری نزدیک می‌شود.",
+                    practices: [
+                        { q: "یک سکه سالم را پرتاب می‌کنیم. احتمال اینکه «رو» بیاید چند درصد است؟ (فقط عدد درصد را بنویسید)", hint: "۱ حالت از ۲ حالت کل، یعنی نصف (۵۰ درصد).", answer: "50", errorTag: "عدم تبدیل کسر ۱/۲ به درصد" },
+                        { q: "در یک کیسه ۳ مهره قرمز و ۷ مهره آبی است. احتمال اینکه مهره انتخابی قرمز باشد چند دهم است؟ (مثلاً 0.3 بنویسید)", hint: "۳ حالت قرمز از کل ۱۰ مهره (۳/۱۰).", answer: "0.3", errorTag: "نوشتن نسبت قرمز به آبی (۳/۷) به جای قرمز به کل مهره‌ها (۳/۱۰)" },
+                        { q: "مجموع زاویه‌های مرکزی در یک نمودار دایره‌ای چند درجه است؟", hint: "یک دایره کامل ۳۶۰ درجه است.", answer: "360", errorTag: "اشتباه گرفتن مجموع زاویه دایره (۳۶۰) با مجموع درصد (۱۰۰)" }
+                    ],
+                    exam: [
+                        { q: "احتمال وقوع یک اتفاق حتمی (مثل طلوع خورشید از شرق) برابر با کدام عدد است؟", options: ["۰", "۰/۵", "۱", "۱۰۰"], correct: 2, errorType: "اشتباه گرفتن عدد احتمال (بین ۰ و ۱) با درصد" },
+                        { q: "در پرتاب یک تاس سالم، احتمال آمدن عدد اول کدام است؟", options: ["۱/۶", "۲/۶", "۳/۶", "۴/۶"], correct: 2, errorType: "اول فرض کردن عدد ۱ در بین اعداد تاس (اعداد اول تاس: ۲، ۳ و ۵ هستند)" },
+                        { q: "برای نمایش تغییرات دمای هوا در طول شبانه‌روز کدام نمودار مناسب‌تر است؟", options: ["دایره‌ای", "خط شکسته", "تصویری", "جدول چوب‌خط"], correct: 1, errorType: "عدم شناخت کاربرد نمودار خط شکسته برای نمایش تغییرات در زمان" },
+                        { q: "احتمال یک اتفاق غیرممکن چقدر است؟", options: ["۱", "۰", "۱-", "۰/۱"], correct: 1, errorType: "عدم تشخیص مقدار صفر برای پیشامد غیرممکن" }
+                    ]
+                }
+            };
+
+            const mod = templates[chapterId] || templates[1];
+            return {
+                conceptTitle: mod.title,
+                conceptDesc: mod.desc,
+                practices: mod.practices,
+                exam: mod.exam
+            };
+        }
+
+        // =========================================================================
+        // ۵. مدیریت وضعیت برنامه (State Management) و منطق تشخیص ایراد
+        // =========================================================================
+        let state = {
+            view: 'home',
+            chapter: null,
+            subchapter: null,
+            tab: 'concept',
+            errors: {} // ساختار: { subId: [ { tag, q, explanation, resolved } ] }
+        };
+
+        function toPersian(str) {
+            const p = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return String(str).replace(/[0-9]/g, d => p[+d]);
+        }
+
+        function normalizeAns(val) {
+            return String(val)
+                .trim()
+                .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
+                .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))
+                .replace(/\//g, '.')
+                .replace(/\s+/g, '');
+        }
+
+        function showModal(title, body) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-body').innerText = body;
+            document.getElementById('custom-modal').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').classList.remove('open');
+        }
+
+        function goHome() {
+            state.view = 'home';
+            state.chapter = null;
+            state.subchapter = null;
+            render();
+        }
+
+        function openChapter(id) {
+            state.chapter = syllabusData.find(c => c.id === id);
+            state.view = 'chapter';
+            render();
+        }
+
+        function openSubchapter(subId) {
+            state.subchapter = state.chapter.subchapters.find(s => s.id === subId);
+            state.view = 'subchapter';
+            state.tab = 'concept';
+            render();
+        }
+
+        function switchTab(tab) {
+            state.tab = tab;
+            render();
+        }
+
+        function logStudentError(subId, tag, qText, explanation) {
+            if (!state.errors[subId]) state.errors[subId] = [];
+            const exists = state.errors[subId].some(e => e.tag === tag && !e.resolved);
+            if (!exists) {
+                state.errors[subId].push({ tag, q: qText, explanation, resolved: false });
+            }
+        }
+
+        function checkPractice(subId, idx, correctAns, errorTag, hint) {
+            const inp = document.getElementById(`prac-inp-${idx}`);
+            const fb = document.getElementById(`prac-fb-${idx}`);
+            if (!inp || !fb) return;
+
+            const u = normalizeAns(inp.value);
+            const c = normalizeAns(correctAns);
+            if (!u) {
+                showModal("پاسخ خالی است", "لطفاً ابتدا پاسخ خود را وارد کنید.");
+                return;
+            }
+
+            fb.style.display = 'block';
+            if (u === c) {
+                fb.className = 'feedback-box feedback-success';
+                fb.innerHTML = `✅ <strong>کاملاً درست است!</strong> تحلیل شما صحیح بود.`;
+            } else {
+                fb.className = 'feedback-box feedback-error';
+                fb.innerHTML = `
+                    ❌ <strong>پاسخ دقیق نیست.</strong><br>
+                    راهنمایی عملی: ${hint}<br>
+                    <strong>این ایراد در تب «تشخیص و رفع ایراد» ثبت شد.</strong>
+                `;
+                const qText = document.getElementById(`prac-q-${idx}`).innerText;
+                logStudentError(subId, errorTag, qText, `پاسخ درست «${toPersian(correctAns)}» است. ${hint}`);
+            }
+        }
+
+        function gradeExam(subId) {
+            const data = getLessonData(subId, state.subchapter.title, state.chapter.id);
+            let score = 0;
+
+            data.exam.forEach((item, idx) => {
+                const chosen = document.querySelector(`input[name="ex-q-${idx}"]:checked`);
+                const resEl = document.getElementById(`ex-res-${idx}`);
+                if (chosen && parseInt(chosen.value, 10) === item.correct) {
+                    score++;
+                    resEl.innerHTML = `<div style="color:#059669; font-size:12px; font-weight:bold; margin-top:6px;">✓ پاسخ صحیح</div>`;
+                } else {
+                    resEl.innerHTML = `<div style="color:#e11d48; font-size:12px; font-weight:bold; margin-top:6px;">✗ اشتباه — گزینه صحیح: ${item.options[item.correct]}</div>`;
+                    logStudentError(
+                        subId,
+                        item.errorType,
+                        item.q,
+                        `گزینه صحیح «${item.options[item.correct]}» است. دلیل ایراد شما: ${item.errorType}.`
+                    );
+                }
+            });
+
+            const box = document.getElementById('exam-result-box');
+            box.style.display = 'block';
+            box.innerHTML = `
+                <div style="margin-top:16px; padding:16px; border-radius:12px; background:#eef2ff; border:1px solid #c7d2fe; color:#312e81;">
+                    <div style="font-weight:bold; font-size:15px; margin-bottom:4px;">نمره شما: ${toPersian(score)} از ${toPersian(data.exam.length)}</div>
+                    <div style="font-size:13px;">
+                        ${score === data.exam.length 
+                            ? 'عالی بود! تمام مفاهیم این بخش را به درستی یاد گرفته‌اید.' 
+                            : 'ایرادهای شما شناسایی شد. برای رفع آن‌ها وارد تب «۴. تشخیص و رفع ایراد» شوید.'}
+                    </div>
+                </div>
+            `;
+        }
+
+        function markResolved(subId, idx) {
+            if (state.errors[subId] && state.errors[subId][idx]) {
+                state.errors[subId][idx].resolved = true;
+                render();
+            }
+        }
+
+        // =========================================================================
+        // ۶. رندر رابط کاربری
+        // =========================================================================
+        function render() {
+            const app = document.getElementById('app-container');
+            const bc = document.getElementById('breadcrumb');
+
+            // صفحه اصلی: فقط لیست ۹ فصل
+            if (state.view === 'home') {
+                bc.innerText = 'فهرست فصل‌ها';
+                app.innerHTML = `
+                    <div class="chapters-grid">
+                        ${syllabusData.map(ch => `
+                            <div class="chapter-card theme-${ch.id}" onclick="openChapter(${ch.id})">
+                                <div>
+                                    <div class="chapter-card-top">
+                                        <span class="badge">${toPersian(ch.subchapters.length)} زیرفصل</span>
+                                        <span style="font-size:12px; color:#64748b; font-weight:bold;">ورود ←</span>
+                                    </div>
+                                    <div class="chapter-title">${ch.title}</div>
+                                </div>
+                                <div class="chapter-subs-preview">
+                                    ${ch.subchapters.map(s => s.title).join(' • ')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                return;
+            }
+
+            // صفحه داخل فصل: زیرفصل‌های همان فصل
+            if (state.view === 'chapter') {
+                const ch = state.chapter;
+                bc.innerHTML = `<span class="link" onclick="goHome()">فصل‌ها</span> / <strong>${ch.title}</strong>`;
+                app.innerHTML = `
+                    <button class="btn btn-back" onclick="goHome()">→ بازگشت به فهرست فصل‌ها</button>
+                    <div class="chapter-card theme-${ch.id}" style="cursor:default; margin-bottom:16px;">
+                        <div class="chapter-title" style="margin-bottom:4px;">${ch.title}</div>
+                        <div style="font-size:13px; color:#475569;">زیرفصل مورد نظر را انتخاب کنید تا وارد آزمایشگاه عملی، تمرین، آزمون و بخش رفع اشکال شوید:</div>
+                    </div>
+                    <div class="sub-list">
+                        ${ch.subchapters.map((sub, i) => {
+                            const activeErr = (state.errors[sub.id] || []).filter(e => !e.resolved).length;
+                            return `
+                                <div class="sub-item" onclick="openSubchapter('${sub.id}')">
+                                    <div class="sub-item-info">
+                                        <div class="sub-num theme-${ch.id}">${toPersian(i + 1)}</div>
+                                        <div>
+                                            <div style="font-weight:bold; font-size:15px;">${sub.title}</div>
+                                            <div class="tags-row">
+                                                <span class="mini-tag">آزمایشگاه عملی</span>
+                                                <span class="mini-tag">تمرین</span>
+                                                <span class="mini-tag">آزمون</span>
+                                                <span class="mini-tag ${activeErr > 0 ? 'err' : ''}">
+                                                    تشخیص ایراد ${activeErr > 0 ? `(${toPersian(activeErr)})` : ''}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span style="color:var(--primary); font-weight:bold; font-size:13px;">شروع ←</span>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+                return;
+            }
+
+            // صفحه داخل زیرفصل: ۴ بخش کامل
+            if (state.view === 'subchapter') {
+                const ch = state.chapter;
+                const sub = state.subchapter;
+                const data = getLessonData(sub.id, sub.title, ch.id);
+                const errList = state.errors[sub.id] || [];
+                const unresolvedCount = errList.filter(e => !e.resolved).length;
+
+                bc.innerHTML = `
+                    <span class="link" onclick="goHome()">فصل‌ها</span> / 
+                    <span class="link" onclick="openChapter(${ch.id})">${ch.title}</span> / 
+                    <strong>${sub.title}</strong>
+                `;
+
+                let contentHTML = '';
+
+                if (state.tab === 'concept') {
+                    contentHTML = `
+                        <div class="card-box">
+                            <h3 style="font-size:17px; margin-bottom:8px;">${data.conceptTitle}</h3>
+                            <p style="font-size:14px; color:#475569; margin-bottom:12px;">${data.conceptDesc}</p>
+                            ${getChapterLabHTML(ch.id, sub.title)}
+                            <div style="display:flex; justify-content:flex-end; margin-top:16px;">
+                                <button class="btn btn-primary" onclick="switchTab('practice')">ورود به بخش تمرین ←</button>
+                            </div>
+                        </div>
+                    `;
+                } else if (state.tab === 'practice') {
+                    contentHTML = `
+                        ${data.practices.map((p, idx) => `
+                            <div class="card-box">
+                                <span class="lab-badge">تمرین عملی ${toPersian(idx + 1)} از ${toPersian(data.practices.length)}</span>
+                                <p id="prac-q-${idx}" style="font-weight:bold; font-size:14px; margin-top:10px;">${p.q}</p>
+                                <div class="input-row">
+                                    <input id="prac-inp-${idx}" type="text" class="text-input" placeholder="پاسخ عددی خود را بنویسید...">
+                                    <button class="btn btn-primary" onclick="checkPractice('${sub.id}', ${idx}, '${p.answer}', '${p.errorTag}', '${p.hint}')">بررسی پاسخ</button>
+                                </div>
+                                <div id="prac-fb-${idx}" style="display:none;"></div>
+                            </div>
+                        `).join('')}
+                        <div style="display:flex; justify-content:flex-end;">
+                            <button class="btn btn-primary" onclick="switchTab('exam')">ورود به آزمون این بخش ←</button>
+                        </div>
+                    `;
+                } else if (state.tab === 'exam') {
+                    contentHTML = `
+                        <div class="card-box">
+                            <h3 style="font-size:16px; margin-bottom:4px;">آزمون سنجش تسلط: ${sub.title}</h3>
+                            <p style="font-size:12px; color:#64748b; margin-bottom:16px;">به تمام ${toPersian(data.exam.length)} سوال پاسخ دهید تا نقاط ضعف شما تحلیل شود.</p>
+                            ${data.exam.map((item, idx) => `
+                                <div style="padding:14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; margin-bottom:12px;">
+                                    <div style="font-weight:bold; font-size:14px;">${toPersian(idx + 1)}. ${item.q}</div>
+                                    <div class="options-grid">
+                                        ${item.options.map((opt, oIdx) => `
+                                            <label class="option-label">
+                                                <input type="radio" name="ex-q-${idx}" value="${oIdx}">
+                                                <span>${opt}</span>
+                                            </label>
+                                        `).join('')}
+                                    </div>
+                                    <div id="ex-res-${idx}"></div>
+                                </div>
+                            `).join('')}
+                            <button class="btn btn-primary" style="width:100%; padding:12px;" onclick="gradeExam('${sub.id}')">ثبت آزمون و تحلیل هوشمند ایرادها</button>
+                            <div id="exam-result-box" style="display:none;"></div>
+                        </div>
+                    `;
+                } else if (state.tab === 'diagnosis') {
+                    contentHTML = `
+                        <div class="card-box">
+                            <h3 style="font-size:16px; margin-bottom:6px;">تشخیص ایرادهای دانش‌آموز و برنامه رفع اشکال</h3>
+                            <p style="font-size:13px; color:#64748b; margin-bottom:16px;">
+                                هر اشتباهی که در تمرین‌ها یا آزمون داشته باشید در این قسمت با دلیل علمی و توضیح جبرانی ثبت می‌شود.
+                            </p>
+                            ${errList.length === 0 ? `
+                                <div style="padding:24px; text-align:center; background:var(--success-bg); border:1px solid #a7f3d0; border-radius:12px; color:#065f46;">
+                                    <div style="font-weight:bold; font-size:15px; margin-bottom:4px;">هنوز ایرادی ثبت نشده است!</div>
+                                    <div style="font-size:12px;">ابتدا تمرین‌ها و آزمون این زیرفصل را انجام دهید تا سیستم عملکرد شما را تحلیل کند.</div>
+                                </div>
+                            ` : errList.map((err, eIdx) => `
+                                <div style="padding:16px; border-radius:12px; border:1px solid ${err.resolved ? '#cbd5e1' : '#fecdd3'}; background:${err.resolved ? '#f8fafc' : '#fff1f2'}; margin-bottom:12px;">
+                                    <div style="margin-bottom:8px;">
+                                        <span class="badge" style="background:${err.resolved ? '#d1fae5' : '#ffe4e6'}; color:${err.resolved ? '#047857' : '#be123c'};">
+                                            ${err.resolved ? '✓ برطرف شده' : '⚠ ایراد تشخیص داده شده'}
+                                        </span>
+                                    </div>
+                                    <div style="font-weight:bold; font-size:14px; margin-bottom:4px;">نوع اشکال: ${err.tag}</div>
+                                    <div style="font-size:12px; color:#475569; margin-bottom:10px;">در سوال: «${err.q}»</div>
+                                    <div style="background:#fff; padding:12px; border-radius:10px; border:1px solid #e2e8f0; font-size:13px; margin-bottom:10px;">
+                                        <strong style="color:var(--primary); display:block; margin-bottom:4px;">راهنمای رفع اشکال:</strong>
+                                        ${err.explanation}
+                                    </div>
+                                    ${!err.resolved ? `<button class="btn btn-success" onclick="markResolved('${sub.id}', ${eIdx})">متوجه شدم و ایرادم برطرف شد ✓</button>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+
+                app.innerHTML = `
+                    <button class="btn btn-back" onclick="openChapter(${ch.id})">→ بازگشت به زیرفصل‌های ${ch.title}</button>
+                    <div style="margin-bottom:14px;">
+                        <span class="badge theme-${ch.id}">${ch.title}</span>
+                        <h2 style="font-size:20px; margin-top:6px;">${sub.title}</h2>
+                    </div>
+
+                    <div class="tabs-bar">
+                        <button class="tab-btn ${state.tab === 'concept' ? 'active' : ''}" onclick="switchTab('concept')">۱. توضیح مفهومی و عملی</button>
+                        <button class="tab-btn ${state.tab === 'practice' ? 'active' : ''}" onclick="switchTab('practice')">۲. بخش تمرین</button>
+                        <button class="tab-btn ${state.tab === 'exam' ? 'active' : ''}" onclick="switchTab('exam')">۳. آزمون</button>
+                        <button class="tab-btn diag-tab ${state.tab === 'diagnosis' ? 'active' : ''}" onclick="switchTab('diagnosis')">
+                            <span>۴. تشخیص و رفع ایراد</span>
+                            ${unresolvedCount > 0 ? `<span class="err-pill">${toPersian(unresolvedCount)}</span>` : ''}
+                        </button>
+                    </div>
+
+                    ${contentHTML}
+                `;
+
+                if (state.tab === 'concept') {
+                    initCurrentLab(ch.id);
+                }
+            }
+        }
+
+        window.onload = function() {
+            render();
+        };
+    </script>
+</body>
+</html>
